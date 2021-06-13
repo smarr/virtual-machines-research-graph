@@ -5,7 +5,7 @@
   <script src="https://d3js.org/d3.v5.min.js"></script>
   <script src="https://unpkg.com/@hpcc-js/wasm@0.3.6/dist/index.min.js"></script>
   <script src="https://unpkg.com/d3-graphviz@3.0.0/build/d3-graphviz.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bibtex-parse-js@0.0.24/bibtexParse.js" integrity="sha256-v968ksKZppVegXgenPlIK/9mN80zJo1PXOCu+ao0lKw=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/gh/smarr/bibtexParseJs/bibtexParse.js"></script>
 
 <style>
 body {
@@ -283,14 +283,19 @@ function renderToDot(papers, concepts) {
 }
 
 function convertToDot(bibtex) {
-  const entries = bibtexParse.toJSON(bibtex);
-  initBibEntries(entries, bibtex);
-  const {papers, concepts} = getPapersAndConcepts(entries);
-  return renderToDot(papers, concepts);
+  try {
+    const entries = bibtexParse.toJSON(bibtex);
+    initBibEntries(entries, bibtex);
+    const {papers, concepts} = getPapersAndConcepts(entries);
+    return renderToDot(papers, concepts);
+  } catch (e) {
+    console.error(e);
+  }
 }
 
 const bibUrl = document.location.hostname.indexOf('github') === -1
-  ? 'vm.bib'
+  // ? 'vm.bib'
+  ? 'stefan.bib'
   : 'https://raw.githubusercontent.com/eregon/virtual-machines-research-graph/master/vm.bib';
 
 const dataPromise = fetch(bibUrl)
