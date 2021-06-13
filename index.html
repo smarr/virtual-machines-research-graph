@@ -150,7 +150,7 @@ function getPapersAndConcepts(entries) {
       shortTitle: paper.entryTags['vm:shortTitle'],
       venue: paper.entryTags.series,
       title: paper.entryTags.title,
-      url: paper.entryTags.url,
+      url: paper.entryTags.url || paper.entryTags.pdf,
       year: paper.entryTags.year
     };
 
@@ -189,7 +189,9 @@ function renderConcepts(concepts) {
 function renderPapers(papers) {
   let result = '';
   for (const paper of papers) {
-    const graphizEscapedUrl = paper.url.replace(/&(?!amp;)/gm, '&amp;');
+    const url = paper.url;
+    const graphizEscapedUrl = url ? url.replace(/&(?!amp;)/gm, '&amp;') : '';
+
     result += `
       "${paper.id}" [
         label = "${paper.shortTitle} (${paper.venue})",
